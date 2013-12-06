@@ -19,8 +19,8 @@ import time
 # Set (append) your PYTHONPATH properly, or just fill in the location of your LEAP
 # SDK folder, e.g., ../LeapSDK/lib where the Leap.py lives and /LeapSDK/lib/x64 or
 # x86 where the *.so files reside.
-sys.path.append("/homes/flier/Projects/Ongoing/Leap_Developer/LeapSDK/lib")
-sys.path.append("/homes/flier/Projects/Ongoing/Leap_Developer/LeapSDK/lib/x64")
+#sys.path.append("/home/flier/Projects/Ongoing/Leap_Developer/LeapSDK/lib")
+#sys.path.append("/home/flier/Projects/Ongoing/Leap_Developer/LeapSDK/lib/x64")
 import threading
 import Leap
 from Leap import CircleGesture, KeyTapGesture, ScreenTapGesture, SwipeGesture
@@ -59,104 +59,105 @@ class LeapInterface(Leap.Listener):
         # Get the most recent frame and report some basic information
         frame = controller.frame()
 
+        '''
         print "Frame id: %d, timestamp: %d, hands: %d, fingers: %d, tools: %d, gestures: %d" % (
               frame.id, frame.timestamp, len(frame.hands), len(frame.fingers), len(frame.tools), len(frame.gestures()))
-
-        if 'empty' in frame.hands.__dict__:
-            if not frame.hands.empty:
-                # Get the first hand
-                self.hand = frame.hands[0]
-
-                # Check if the hand has any fingers
-                #fingers = self.hand.fingers
-                #if not fingers.empty:
-                    # Calculate the hand's average finger tip position
-                    #avg_pos = Leap.Vector()
-                    #for finger in fingers:
-                        #avg_pos += finger.tip_position
-                    # avg_pos /= len(fingers)
-                    # print "Hand has %d fingers, average finger tip position: %s" % (len(fingers), avg_pos)
-
-                # Get the hand's sphere radius and palm position
-                # print "Hand sphere radius: %f mm, palm position: %s" % (self.hand.sphere_radius, hand.palm_position)
-
-                # Get the hand's normal vector and direction
-                normal = self.hand.palm_normal
-                direction = self.hand.direction
-                pos = self.hand.palm_position
-
-                self.hand_direction[0] = direction.x
-                self.hand_direction[1] = direction.y
-                self.hand_direction[2] = direction.z
-                self.hand_normal[0]    = normal.x
-                self.hand_normal[1]    = normal.y
-                self.hand_normal[2]    = normal.z
-                self.hand_palm_pos[0]  = pos.x
-                self.hand_palm_pos[1]  = pos.y
-                self.hand_palm_pos[2]  = pos.z
-                self.hand_pitch        = direction.pitch * Leap.RAD_TO_DEG
-                self.hand_yaw          = normal.yaw * Leap.RAD_TO_DEG
-                self.hand_roll         = direction.roll * Leap.RAD_TO_DEG
-
-                # Calculate the hand's pitch, roll, and yaw angles
-                print "Hand pitch: %f degrees, roll: %f degrees, yaw: %f degrees" % (self.hand_pitch, self.hand_roll, self.hand_yaw)
-
-                '''
-                # Gestures
-                for gesture in frame.gestures():
-                    if gesture.type == Leap.Gesture.TYPE_CIRCLE:
-                        circle = CircleGesture(gesture)
-
-                        # Determine clock direction using the angle between the pointable and the circle normal
-                        if circle.pointable.direction.angle_to(circle.normal) <= Leap.PI/4:
-                            clockwiseness = "clockwise"
-                        else:
-                            clockwiseness = "counterclockwise"
-
-                        # Calculate the angle swept since the last frame
-                        swept_angle = 0
-                        if circle.state != Leap.Gesture.STATE_START:
-                            previous_update = CircleGesture(controller.frame(1).gesture(circle.id))
-                            swept_angle =  (circle.progress - previous_update.progress) * 2 * Leap.PI
-
-                        print "Circle id: %d, %s, progress: %f, radius: %f, angle: %f degrees, %s" % (
-                                gesture.id, self.state_string(gesture.state),
-                                circle.progress, circle.radius, swept_angle * Leap.RAD_TO_DEG, clockwiseness)
-
-                    if gesture.type == Leap.Gesture.TYPE_SWIPE:
-                        swipe = SwipeGesture(gesture)
-                        print "Swipe id: %d, state: %s, position: %s, direction: %s, speed: %f" % (
-                                gesture.id, self.state_string(gesture.state),
-                                swipe.position, swipe.direction, swipe.speed)
-
-                    if gesture.type == Leap.Gesture.TYPE_KEY_TAP:
-                        keytap = KeyTapGesture(gesture)
-                        print "Key Tap id: %d, %s, position: %s, direction: %s" % (
-                                gesture.id, self.state_string(gesture.state),
-                                keytap.position, keytap.direction )
-
-                    if gesture.type == Leap.Gesture.TYPE_SCREEN_TAP:
-                        screentap = ScreenTapGesture(gesture)
-                        print "Screen Tap id: %d, %s, position: %s, direction: %s" % (
-                                gesture.id, self.state_string(gesture.state),
-                                screentap.position, screentap.direction )
-
-            if not (frame.hands.empty and frame.gestures().empty):
-                print ""
-
-        def state_string(self, state):
-            if state == Leap.Gesture.STATE_START:
-                return "STATE_START"
-
-            if state == Leap.Gesture.STATE_UPDATE:
-                return "STATE_UPDATE"
-
-            if state == Leap.Gesture.STATE_STOP:
-                return "STATE_STOP"
-
-            if state == Leap.Gesture.STATE_INVALID:
-                return "STATE_INVALID"
         '''
+        
+        if not frame.hands.is_empty:
+            # Get the first hand
+            self.hand = frame.hands[0]
+
+            # Check if the hand has any fingers
+            #fingers = self.hand.fingers
+            #if not fingers.empty:
+                # Calculate the hand's average finger tip position
+                #avg_pos = Leap.Vector()
+                #for finger in fingers:
+                    #avg_pos += finger.tip_position
+                # avg_pos /= len(fingers)
+                # print "Hand has %d fingers, average finger tip position: %s" % (len(fingers), avg_pos)
+
+            # Get the hand's sphere radius and palm position
+            # print "Hand sphere radius: %f mm, palm position: %s" % (self.hand.sphere_radius, hand.palm_position)
+
+            # Get the hand's normal vector and direction
+            normal = self.hand.palm_normal
+            direction = self.hand.direction
+            pos = self.hand.palm_position
+
+            self.hand_direction[0] = direction.x
+            self.hand_direction[1] = direction.y
+            self.hand_direction[2] = direction.z
+            self.hand_normal[0]    = normal.x
+            self.hand_normal[1]    = normal.y
+            self.hand_normal[2]    = normal.z
+            self.hand_palm_pos[0]  = pos.x
+            self.hand_palm_pos[1]  = pos.y
+            self.hand_palm_pos[2]  = pos.z
+            self.hand_pitch        = direction.pitch * Leap.RAD_TO_DEG
+            self.hand_yaw          = normal.yaw * Leap.RAD_TO_DEG
+            self.hand_roll         = direction.roll * Leap.RAD_TO_DEG
+
+            # Calculate the hand's pitch, roll, and yaw angles
+            print "Hand pitch: %f degrees, roll: %f degrees, yaw: %f degrees" % (self.hand_pitch, self.hand_roll, self.hand_yaw)
+
+            '''
+            # Gestures
+            for gesture in frame.gestures():
+                if gesture.type == Leap.Gesture.TYPE_CIRCLE:
+                    circle = CircleGesture(gesture)
+
+                    # Determine clock direction using the angle between the pointable and the circle normal
+                    if circle.pointable.direction.angle_to(circle.normal) <= Leap.PI/4:
+                        clockwiseness = "clockwise"
+                    else:
+                        clockwiseness = "counterclockwise"
+
+                    # Calculate the angle swept since the last frame
+                    swept_angle = 0
+                    if circle.state != Leap.Gesture.STATE_START:
+                        previous_update = CircleGesture(controller.frame(1).gesture(circle.id))
+                        swept_angle =  (circle.progress - previous_update.progress) * 2 * Leap.PI
+
+                    print "Circle id: %d, %s, progress: %f, radius: %f, angle: %f degrees, %s" % (
+                            gesture.id, self.state_string(gesture.state),
+                            circle.progress, circle.radius, swept_angle * Leap.RAD_TO_DEG, clockwiseness)
+
+                if gesture.type == Leap.Gesture.TYPE_SWIPE:
+                    swipe = SwipeGesture(gesture)
+                    print "Swipe id: %d, state: %s, position: %s, direction: %s, speed: %f" % (
+                            gesture.id, self.state_string(gesture.state),
+                            swipe.position, swipe.direction, swipe.speed)
+
+                if gesture.type == Leap.Gesture.TYPE_KEY_TAP:
+                    keytap = KeyTapGesture(gesture)
+                    print "Key Tap id: %d, %s, position: %s, direction: %s" % (
+                            gesture.id, self.state_string(gesture.state),
+                            keytap.position, keytap.direction )
+
+                if gesture.type == Leap.Gesture.TYPE_SCREEN_TAP:
+                    screentap = ScreenTapGesture(gesture)
+                    print "Screen Tap id: %d, %s, position: %s, direction: %s" % (
+                            gesture.id, self.state_string(gesture.state),
+                            screentap.position, screentap.direction )
+
+        if not (frame.hands.empty and frame.gestures().empty):
+            print ""
+
+    def state_string(self, state):
+        if state == Leap.Gesture.STATE_START:
+            return "STATE_START"
+
+        if state == Leap.Gesture.STATE_UPDATE:
+            return "STATE_UPDATE"
+
+        if state == Leap.Gesture.STATE_STOP:
+            return "STATE_STOP"
+
+        if state == Leap.Gesture.STATE_INVALID:
+            return "STATE_INVALID"
+    '''
 
     def get_hand_direction(self):
         return self.hand_direction
