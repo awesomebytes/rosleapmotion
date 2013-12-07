@@ -4,6 +4,7 @@ import rospy
 import leap_interface
 from leap_motion.msg import leap
 from leap_motion.msg import leapros
+from leap_motion.msg import Finger
 
 # Obviously, this method publishes the data defined in leapros.msg to /leapmotion/data
 def sender():
@@ -15,12 +16,13 @@ def sender():
     rospy.init_node('leap_pub')
 
     while not rospy.is_shutdown():
-        hand_direction_   = li.get_hand_direction()
-        hand_normal_      = li.get_hand_normal()
-        hand_palm_pos_    = li.get_hand_palmpos()
-        hand_pitch_       = li.get_hand_pitch()
-        hand_roll_        = li.get_hand_roll()
-        hand_yaw_         = li.get_hand_yaw()
+        hand_direction_ = li.hand_direction
+        hand_normal_    = li.hand_normal
+        hand_palm_pos_  = li.hand_palm_pos
+        hand_pitch_     = li.hand_pitch
+        hand_roll_      = li.hand_roll
+        hand_yaw_       = li.hand_yaw
+
         msg = leapros()
         msg.direction.x = hand_direction_[0]
         msg.direction.y = hand_direction_[1]
@@ -34,6 +36,30 @@ def sender():
         msg.ypr.x = hand_yaw_
         msg.ypr.y = hand_pitch_
         msg.ypr.z = hand_roll_
+        
+        # add finger data for each finger
+        '''
+        msg.fingers = []
+        finger_data = li.finger_data
+        for finger in finger_data:
+            finger_msg = Finger()
+            (pos, vel, dir) = finger
+            
+            finger_msg.position.x = pos[0]
+            finger_msg.position.y = pos[1]
+            finger_msg.position.z = pos[2]
+            
+            finger_msg.velocity.x = vel[0]
+            finger_msg.velocity.x = vel[1]
+            finger_msg.velocity.x = vel[2]
+            
+            finger_msg.direction.x = dir[0]
+            finger_msg.direction.y = dir[1]
+            finger_msg.direction.z = dir[2]
+            
+            msg.fingers.append(finger_msg)
+        '''
+
         # We don't publish native data types, see ROS best practices
         # pub.publish(hand_direction=hand_direction_,hand_normal = hand_normal_, hand_palm_pos = hand_palm_pos_, hand_pitch = hand_pitch_, hand_roll = hand_roll_, hand_yaw = hand_yaw_)
         pub_ros.publish(msg)

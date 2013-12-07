@@ -37,6 +37,7 @@ class LeapInterface(Leap.Listener):
         self.hand_pitch     = 0.0
         self.hand_yaw       = 0.0
         self.hand_roll      = 0.0
+        self.finger_data = []
         print "Initialized Leap Motion Device"
 
     def on_connect(self, controller):
@@ -69,14 +70,14 @@ class LeapInterface(Leap.Listener):
             self.hand = frame.hands[0]
 
             # Check if the hand has any fingers
-            #fingers = self.hand.fingers
-            #if not fingers.empty:
-                # Calculate the hand's average finger tip position
-                #avg_pos = Leap.Vector()
-                #for finger in fingers:
-                    #avg_pos += finger.tip_position
-                # avg_pos /= len(fingers)
-                # print "Hand has %d fingers, average finger tip position: %s" % (len(fingers), avg_pos)
+            fingers = self.hand.fingers
+            self.finger_data = []
+            if not fingers.is_empty:
+                for finger in (f for f in fingers if f.is_finger) :
+                    pos = finger.tip_position
+                    vel = finger.tip_velocity
+                    direction = finger.direction
+                    self.finger_data.append({'pos':pos, 'vel':vel, 'dir':direction})
 
             # Get the hand's sphere radius and palm position
             # print "Hand sphere radius: %f mm, palm position: %s" % (self.hand.sphere_radius, hand.palm_position)
@@ -100,7 +101,7 @@ class LeapInterface(Leap.Listener):
             self.hand_roll         = direction.roll * Leap.RAD_TO_DEG
 
             # Calculate the hand's pitch, roll, and yaw angles
-            print "Hand pitch: %f degrees, roll: %f degrees, yaw: %f degrees" % (self.hand_pitch, self.hand_roll, self.hand_yaw)
+            print "Hand pitch: %f degrees, roll: %f degrees, yaw: %f degrees, %d fingers" % (self.hand_pitch, self.hand_roll, self.hand_yaw, len(self.finger_data))
 
             '''
             # Gestures
@@ -159,25 +160,6 @@ class LeapInterface(Leap.Listener):
             return "STATE_INVALID"
     '''
 
-    def get_hand_direction(self):
-        return self.hand_direction
-
-    def get_hand_normal(self):
-        return self.hand_normal
-
-    def get_hand_palmpos(self):
-        return self.hand_palm_pos
-
-    def get_hand_yaw(self):
-        return self.hand_yaw
-
-    def get_hand_pitch(self):
-        return self.hand_pitch
-
-    def get_hand_roll(self):
-        return self.hand_roll
-
-
 class Runner(threading.Thread):
 
     def __init__(self,arg=None):
@@ -190,23 +172,33 @@ class Runner(threading.Thread):
     def __del__(self):
         self.controller.remove_listener(self.listener)
 
-    def get_hand_direction(self):
-        return self.listener.get_hand_direction()
+    @property
+    def hand_direction(self):
+        return self.listener.hand_direction
 
-    def get_hand_normal(self):
-        return self.listener.get_hand_normal()
+    @property
+    def hand_normal(self):
+        return self.listener.hand_normal
 
-    def get_hand_palmpos(self):
-        return self.listener.get_hand_palmpos()
+    @property
+    def hand_palm_pos(self):
+        return self.listener.hand_palm_pos
 
-    def get_hand_roll(self):
-        return self.listener.get_hand_roll()
+    @property
+    def hand_roll(self):
+        return self.listener.hand_roll
 
-    def get_hand_pitch(self):
-        return self.listener.get_hand_pitch()
+    @property
+    def hand_pitch(self):
+        return self.listener.hand_pitch
 
-    def get_hand_yaw(self):
-        return self.listener.get_hand_yaw()
+    @property
+    def hand_yaw(self):
+        return self.listener.hand_yaw
+
+    @property
+    def finger_data(self):
+        return self.listener.finger_data
 
     def run (self):
         while True:

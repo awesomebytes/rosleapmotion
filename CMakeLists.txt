@@ -7,6 +7,7 @@ add_message_files(
     FILES
     leap.msg
     leapros.msg
+    Finger.msg
 )
 
 generate_messages(
