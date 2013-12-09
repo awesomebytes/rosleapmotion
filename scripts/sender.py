@@ -38,27 +38,25 @@ def sender():
         msg.ypr.z = hand_roll_
         
         # add finger data for each finger
-        '''
+        
         msg.fingers = []
         finger_data = li.finger_data
         for finger in finger_data:
             finger_msg = Finger()
-            (pos, vel, dir) = finger
             
-            finger_msg.position.x = pos[0]
-            finger_msg.position.y = pos[1]
-            finger_msg.position.z = pos[2]
+            finger_msg.position.x = finger['pos'][0]
+            finger_msg.position.y = finger['pos'][1]
+            finger_msg.position.z = finger['pos'][2]
             
-            finger_msg.velocity.x = vel[0]
-            finger_msg.velocity.x = vel[1]
-            finger_msg.velocity.x = vel[2]
+            finger_msg.velocity.x = finger['vel'][0]
+            finger_msg.velocity.x = finger['vel'][1]
+            finger_msg.velocity.x = finger['vel'][2]
             
-            finger_msg.direction.x = dir[0]
-            finger_msg.direction.y = dir[1]
-            finger_msg.direction.z = dir[2]
+            finger_msg.direction.x = finger['dir'][0]
+            finger_msg.direction.y = finger['dir'][1]
+            finger_msg.direction.z = finger['dir'][2]
             
             msg.fingers.append(finger_msg)
-        '''
 
         # We don't publish native data types, see ROS best practices
         # pub.publish(hand_direction=hand_direction_,hand_normal = hand_normal_, hand_palm_pos = hand_palm_pos_, hand_pitch = hand_pitch_, hand_roll = hand_roll_, hand_yaw = hand_yaw_)
