@@ -19,8 +19,8 @@ import time
 # Set (append) your PYTHONPATH properly, or just fill in the location of your LEAP
 # SDK folder, e.g., ../LeapSDK/lib where the Leap.py lives and /LeapSDK/lib/x64 or
 # x86 where the *.so files reside.
-sys.path.append("/homes/flier/Projects/Ongoing/Leap_Developer/LeapSDK/lib")
-sys.path.append("/homes/flier/Projects/Ongoing/Leap_Developer/LeapSDK/lib/x64")
+sys.path.append("/home/sam/LeapDeveloperKit/LeapSDK/lib")
+sys.path.append("/home/sam/LeapDeveloperKit/LeapSDK/lib/x64")
 import threading
 import Leap
 from Leap import CircleGesture, KeyTapGesture, ScreenTapGesture, SwipeGesture
