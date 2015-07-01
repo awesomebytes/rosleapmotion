@@ -49,7 +49,7 @@ INSTALLATION
 
 4. cd ~/catkin_ws && catkin_make
 
-5. Start a roscore (another shell) and leapd (another shell)
+5. Start a roscore (another shell) and leapd (another shell), you may want to do LeapControlPanel --showsettings
 
 6. You need to append the location of your LeapSDK (especially /lib and /lib/x64 or x86) to your PYTHONPATH,e.g., export PYTHONPATH=$PYTHONPATH:/path/to/SDK/lib:/path/to/SDK/lib/x64
 Remember that you will need to have your path set at least in the "sender" shell. If you don't want to set it every time, you can also alter the leapinterface.py file (have a look at it).
